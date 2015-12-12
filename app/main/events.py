@@ -1,6 +1,6 @@
 from flask import session
 from flask.ext.socketio import emit, join_room, leave_room
-from app.main import socketio
+from app import socketio
 
 
 @socketio.on('connect')
@@ -20,8 +20,7 @@ def ws_new_message(message):
     room = session.get('room')
     try:
         emit('message',
-             {'usr': session.get('user'),
-              'msg': message},
+             {'usr': session.get('user'), 'msg': message},
              room=room)
     except Exception:
         pass
@@ -30,9 +29,7 @@ def ws_new_message(message):
 def ws_disconnect():
     try:
         emit('message',
-             {'usr': session.get('user'),
-              'msg': 'Покинул комнату'},
+             {'usr': session.get('user'), 'msg': 'Покинул комнату'},
              room=room)
-             }
-     except Exception:
-         pass
+    except Exception:
+        pass
