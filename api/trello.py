@@ -4,8 +4,6 @@ import json
 
 
 def Access_token( mail , pas):
-     
-
      # return text["access_token"]
     url = 'https://proffstore.com/api/v1/token'
     client_code = "a34f65b2c464"
@@ -14,7 +12,7 @@ def Access_token( mail , pas):
     r = requests.post(url, headers=headers , data= json.dumps(payload))
     print( r.json()["access_token"] )
     return r.json()["access_token"]
- 
+
 
 def to_do_task( access_token ):
 
@@ -66,9 +64,13 @@ def st_color(start , end):
 print ("1.Access_token")
 ACCESS_TOKEN = Access_token("mrkiril@ukr.net","123ss456")
 print ("2. to_do_task")
+<<<<<<< HEAD
 print ( order_task(ACCESS_TOKEN) )
 
 
 
 
 
+=======
+order_task(ACCESS_TOKEN)
+>>>>>>> origin/master
