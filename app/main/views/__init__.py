@@ -1,6 +1,5 @@
-from flask import Flask
-from flask_restful import Api
+from app import api
+from .auth import Auth
 
-app = Flask(__name__)
-api = Api(app)
 
+api.add_resource(Auth, "/login", endpoint="login")
