@@ -64,13 +64,8 @@ def st_color(start , end):
 print ("1.Access_token")
 ACCESS_TOKEN = Access_token("mrkiril@ukr.net","123ss456")
 print ("2. to_do_task")
-<<<<<<< HEAD
+
 print ( order_task(ACCESS_TOKEN) )
 
+#order_task(ACCESS_TOKEN)
 
-
-
-
-=======
-order_task(ACCESS_TOKEN)
->>>>>>> origin/master
