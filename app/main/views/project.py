@@ -28,8 +28,9 @@ class Project(Resource):
         return project
 
     def delete(self, id):
+        user_id = session.query(User).filter(User.id == g.user['id']).first()
         project = session.query(Project).filter(and_(Project.id == id,
-                                                     Project.owner_id == g.user['id'])).first()
+                                                     Project.owner_id == user_id)).first()
         if not project:
             return abort(403, message="Project does not exist or you do not have access")
         session.delete(project)

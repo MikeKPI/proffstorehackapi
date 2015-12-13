@@ -25,7 +25,7 @@ class Project(db.Model):
     owner_id = db.relationship(db.Integer, db.ForeignKey('users.id'))
 
     users = db.relationship('User', secondary=projects_users, back_populate='projects')
-    tasks = db.relationship('Task')
+    tasks = db.relationship('Task', seconady=project_tasks, back_populate='projects')
 
 
 class Task(db.Model):
