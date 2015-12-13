@@ -1,8 +1,8 @@
 from app import api
 from .auth import Auth
-from project import Project, ProjectList
-from task import Task, TaskList
-from comment import Comment, CommentList
+from .project import Project, ProjectList
+from .task import Task, TaskList
+from .comment import Comment, CommentList
 
 api.add_resource(Auth, "/login", endpoint="login")
 api.add_resource(ProjectList, "/projects", endpoint="project")

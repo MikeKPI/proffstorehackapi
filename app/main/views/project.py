@@ -1,7 +1,7 @@
 from flask_restful import Resource, fields, marshal_with, reqparse, abort
 from sqlalchemy import and_
 from .auth import login_required
-from db import session
+from app import db
 from app.models import Project, User
 from flask import g
 
@@ -22,32 +22,32 @@ class Project(Resource):
 
     @marshal_with(project_fields)
     def get(self, id):
-        project = session.query(Project).filter(Project.id == id).first()
+        project = db.session.query(Project).filter(Project.id == id).first()
         if not project:
             return abort(404, message="Project does not exist")
         return project
 
     def delete(self, id):
-        user_id = session.query(User).filter(User.id == g.user['id']).first()
-        project = session.query(Project).filter(and_(Project.id == id,
+        user_id = db.session.query(User).filter(User.id == g.user['id']).first()
+        project = db.session.query(Project).filter(and_(Project.id == id,
                                                      Project.owner_id == user_id)).first()
         if not project:
             return abort(403, message="Project does not exist or you do not have access")
-        session.delete(project)
-        session.commit()
+        db.session.delete(project)
+        db.session.commit()
         return {}, 204
 
     @marshal_with(project_fields)
     def put(self, id):
         parsed = parser.parse_args()
-        project = session.query(Project).filter(and_(Project.id == id,
+        project = db.session.query(Project).filter(and_(Project.id == id,
                                                      Project.owner_id == g.user['id'])).first()
         if not project:
             return abort(403, message="Project does not exist or you do not have access")
         project.name = parsed['name']
         project.description = parsed['description']
-        session.add(project)
-        session.commit()
+        db.session.add(project)
+        db.session.commit()
         return project, 201
 
 
@@ -56,14 +56,14 @@ class ProjectList(Resource):
 
     @marshal_with(project_fields)
     def get(self):
-        projects = session.query(Project).all()
+        projects = db.session.query(Project).all()
         return projects
 
     @marshal_with(project_fields)
     def post(self):
         parsed = parser.parse_args()
-        user_id = session.query(User).filter(User.id == g.user['id']).first()
+        user_id = db.session.query(User).filter(User.id == g.user['id']).first()
         project = Project(name=parsed['name'], description=parsed['description'], owner_id=user_id)
-        session.add(project)
-        session.commit()
+        db.session.add(project)
+        db.session.commit()
         return project, 201
