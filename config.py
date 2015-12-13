@@ -2,6 +2,7 @@ import os
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
+DB_URI = "sqlite://./app.db"
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess key'

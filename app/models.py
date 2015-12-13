@@ -10,6 +10,16 @@ users_tasks = db.Table('users_tasks', db.Base.metadata,
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
 )
 
+project_tasks = db.Table('project_tasks', db.Base.metadata,
+    db.Column('project_id', db.Integer, db.ForeignKey('projects.id')),
+    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
+)
+
+task_comments = db.Table('project_tasks', db.Base.metadata,
+    db.Column('comment_id', db.Integer, db.ForeignKey('comment.id')),
+    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
+)
+
 
 class Project(db.Model):
     __tablename__ = 'projects'
@@ -17,13 +27,14 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(1024))
+    owner_id = db.relationship(db.Integer, db.ForeignKey('users.id'))
 
     users = db.relationship('User', secondary=projects_users, back_populate='projects')
-    tasks = db.relationship('Task')
+    tasks = db.relationship('Task', seconady=project_tasks, back_populate='projects')
 
 
 class Task(db.Model):
-    __tablename__ = 'models'
+    __tablename__ = 'tasks'
 
     id = db.Column(db.Intger, primary_key=True)
     name = db.Column(db.String(64))
@@ -31,6 +42,7 @@ class Task(db.Model):
 
     users = db.relationship('User', secondary=projects_users, back_populate='tasks')
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
+    comments = db.relationship('Comment', secondary=task_comments, back_populate='tasks')
 
 
 class User(db.Model):
@@ -43,9 +55,10 @@ class User(db.Model):
 
 
 class Comment(db.Model):
-    __tablename__ = 'coments'
+    __tablename__ = 'comments'
 
     id = db.Column(db.Intger, primary_key=True)
     text = db.Column(db.String(1024 * 1024))
 
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     user_id = db.Column(db.Intger, db.ForeignKey('users.id'))
