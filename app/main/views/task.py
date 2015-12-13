@@ -30,8 +30,7 @@ class Task(Resource):
 
     def delete(self, id):
         user_id = session.query(User).filter(User.id == g.user['id']).first()
-        task = session.query(Task).filter(and_(Task.id == id,
-                                                     Task.owner_id == user_id)).first()
+        task = session.query(Task).filter(Task.id == id).first()
         if not task:
             return abort(403, message="Task does not exist or you do not have access")
         session.delete(task)
@@ -41,8 +40,7 @@ class Task(Resource):
     @marshal_with(task_fields)
     def put(self, id):
         parsed = parser.parse_args()
-        task = session.query(Task).filter(and_(Task.id == id,
-                                                     Task.owner_id == g.user['id'])).first()
+        task = session.query(Task).filter(Task.id == id).first()
         if not task:
             return abort(403, message="Task does not exist or you do not have access")
         task.name = parsed['name']
