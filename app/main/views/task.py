@@ -1,5 +1,5 @@
 from flask_restful import Resource
-
+from .auth import login_required
 
 class Task(Resource):
 
